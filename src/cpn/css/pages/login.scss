@@ -1,0 +1,18 @@
+@import "../init/pre-defined-value";
+
+.login{
+    background-color: $bg-pale-grey;
+    .container{
+        height: 50vh;
+        .content{
+            background: $bg-pale-theme;
+
+
+        }
+        .form{
+            transform: scale(1.2);
+            box-shadow: $shadow;
+            background: $white;
+        }
+    }
+}

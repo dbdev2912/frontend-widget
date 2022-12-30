@@ -1,0 +1,42 @@
+.hover:hover{
+    background: $grey;
+    cursor: pointer;
+}
+
+.theme-hightlight{
+    background: $theme-color;
+    color: $white;
+
+    &:hover{
+        background: $bg-pale-theme;
+
+    }
+    .delete-icon{
+        display: block;
+    }
+}
+
+.no-hover:hover{
+    background: $theme-color;
+    color: $white;
+    cursor: pointer;
+}
+
+
+.no-over-flow{
+    height: 0;
+    overflow: hidden;
+    transition: 0.25s ease-in;
+
+    .drop-container{
+
+    }
+}
+
+.scroll-y{
+    overflow-y: scroll;
+}
+
+.no-scroll-x{
+    overflow-x: hidden;
+}

@@ -1,0 +1,42 @@
+
+
+input{
+    display: block;
+    border-radius: 0.5em;
+    outline: none;
+}
+
+button{
+    background: $white;
+    outline: none;
+    border: 1px solid $black;
+    border-radius: 0.5em;
+    cursor: pointer;
+}
+
+.button-theme{
+    background-color: $theme-color;
+    color: $white;
+    border: none;
+    cursor: pointer;
+}
+
+.input-outline{
+    outline: none;
+    border: 1px solid $grey;
+}
+
+
+.input-theme-outline{
+    outline: none;
+    border: 1px solid $theme-color;
+}
+
+.transparent{
+    background: transparent;
+}
+
+.form-small{
+    width: 100%;
+    max-width: 488px;
+}

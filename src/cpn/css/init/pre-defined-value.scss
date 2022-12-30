@@ -1,0 +1,31 @@
+$black: #000000;
+$white: #ffffff;
+// $theme-color: rgb(163, 73, 164);
+$theme-color: #0067dd;
+$grey: #ccc;
+
+$bg-pale-grey: #fafafa;
+$bg-trans-grey: rgba(100,100,100, 0.5);
+// $bg-pale-theme: rgb(200, 191, 231);
+$bg-pale-theme: #0067ddaa;
+
+$shadow: 5px 5px 10px 0px $grey;
+
+
+
+$screen-width: 1280px;
+$pad-width: 768px;
+$mobile-width: 448px;
+
+.app-container{
+    padding-left: 300px;
+}
+
+.h-200{
+    height: 200px;
+    // background: $bg-pale-theme;
+}
+
+.bg-white{
+    background: $white;
+}

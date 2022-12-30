@@ -1,0 +1,40 @@
+.navbar{
+    width: 300px;
+    background: $white;
+    box-shadow: $shadow;
+}
+
+.box-fit-nav-bar{
+    width: calc( 100vw - 300px );
+}
+
+
+.horizon-nav-bar{
+    background: $black;
+    color: white;
+    *{
+        padding: 0.5em;
+        cursor: pointer;
+        padding-right: 1.5em;
+
+        &::before{
+            content: "|";
+            color: $white;
+            margin-right: 1em;
+        }
+
+        &:nth-child(1){
+            &::before{
+                opacity: 0;
+            }
+        }
+
+        &:hover{
+            background-color: $theme-color;
+
+            &::before{
+                opacity: 0;
+            }
+        }
+    }
+}

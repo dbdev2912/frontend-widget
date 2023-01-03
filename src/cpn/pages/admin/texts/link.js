@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import $ from 'jquery';
 export default ( props ) => {
-    const type = "text";
-    const label = "Văn bản mới";
+    const type = "link";
+    const label = "Đường dẫn mới";
     const { id } = props
     const [ editState, setEditState ] = useState(false)
 
@@ -16,11 +16,12 @@ export default ( props ) => {
     }
 
     return(
-        <div id={id} className="draggable" style={{ width: "fit-content" }} widget-type={ type } value={ label } >
+        <div id={id} className="draggable" style={{ width: "fit-content" }} widget-type={type} value={ label }>
 
-            <div className="relative index-2" onClick={ editStateUpdate }>
-                <span className="text-little-bigger"> { label } </span>
+            <div className="relative index-2" onClick = { editStateUpdate } >
+                <span className="text-little-bigger">{ label }</span>
             </div>
+
             {
                 editState ?
                 <div className="fk-bg fixed index-1 t-0 l-0 full-screen" onClick={ editStateUpdate }/>

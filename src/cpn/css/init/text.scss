@@ -53,6 +53,14 @@
     font-style: italic;
 }
 
+.underline{
+    text-decoration: underline;
+}
+
+.bold{
+    font-weight: bold;
+}
+
 .text-pale{
     color: $bg-pale-grey;
 }
@@ -60,7 +68,7 @@
 
 .link{
     color: $black;
-    
+
     &:hover{
         color: $theme-color;
         text-decoration: underline;

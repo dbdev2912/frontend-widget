@@ -31,6 +31,10 @@
     border-bottom: 1px solid $grey;
 }
 
+.border-theme{
+    border: 1px solid $theme-color;
+}
+
 .border-bold{
     border: 3px solid $black;
 }

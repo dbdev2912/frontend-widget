@@ -1,20 +1,27 @@
 import { useEffect, useState } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
 import $ from 'jquery';
 import { redirect, openTab } from '../../useful';
 const newPageLink = '/ml-admin/ui/new';
 
 export default () => {
-
+    const unique_string = useSelector( state => state.unique_string )
     const [ tableHeight, setTableHeight ] = useState(0);
-
+    const [ pages, setPages ] = useState([
+        { title: "Menu chung", edit_url: '/ml-admin/ui/navbar', url: "Khum có", last_change: "Hôm qua lúc 16:54 - Cập nhật đủ thứ" }
+    ])
     useEffect(() => {
         const height = window.innerHeight - $('#top-section').height() - 75;
         setTableHeight(height)
-        console.log(height)
-
+        fetch(`/api/${unique_string}/pages`).then( res => res.json() )
+        .then( ({ pageList }) => {
+            const pageListFormated = pageList.map( page => {
+                return { ...page, edit_url: `/ml-admin/ui/edit/${page.id}` }
+            })
+            setPages([...pages, ...pageListFormated])
+        })
     }, [])
-
-    const list = [1,2,3,4,5,6,7,8,9,10,11,12,]
 
     return(
         <div className="p-l-1 p-t-1 p-r-1 p-b-1 container-fluid">
@@ -41,11 +48,11 @@ export default () => {
                     </thead>
 
                     <tbody>
-                    { list.map( item =>
-                        <tr className="hover" onClick={ () => { openTab(`/ml-admin/ui/edit/${item}`) } }>
-                            <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">Trang chủ</td>
-                            <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">/</td>
-                            <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">Xuất bản ngày 30-12-2022</td>
+                    { pages.map( page =>
+                        <tr className="hover" onClick={ () => { openTab(page.edit_url) } }>
+                            <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">{page.title}</td>
+                            <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">{page.url}</td>
+                            <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">{page.last_change ?page.last_change: " " }</td>
                         </tr>
                     ) }
 

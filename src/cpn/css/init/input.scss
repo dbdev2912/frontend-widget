@@ -21,6 +21,14 @@ button{
     cursor: pointer;
 }
 
+.button-red{
+    background-color: $red;
+    color: $white;
+    border: none;
+    cursor: pointer;
+    padding: 0.25em 1em;
+}
+
 .input-outline{
     outline: none;
     border: 1px solid $grey;

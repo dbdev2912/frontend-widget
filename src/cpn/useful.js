@@ -39,6 +39,41 @@ const redirect = ( url ) => {
     window.location = url;
 }
 
+const generateClassName = ( object ) => {
+
+    let className = "";
+    if( object.font.is_bold ){
+        className +=" bold";
+    }
+    if( object.font.is_italic ){
+        className += " italic";
+    }
+    if( object.font.is_underline ){
+        className+= " underline";
+    }
+    // console.log( className )
+    return className;
+}
+
+const propsFromClassName = ( classString ) => {
+    let obj = {
+        is_bold: false,
+        is_italic: false,
+        is_underline: false,
+    };
+
+    if( classString.includes("bold") ){
+        obj.is_bold = true;
+    }
+    if( classString.includes("italic") ){
+        obj.is_italic = true;
+    }
+    if( classString.includes("underline") ){
+        obj.is_underline = true;
+    }
+    return obj
+}
+
 export {
     dateFormat,
     dateStringFormat,
@@ -47,4 +82,6 @@ export {
     generateMapKey,
     openTab,
     redirect,
+    generateClassName,
+    propsFromClassName
 }

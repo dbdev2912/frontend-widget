@@ -15,7 +15,12 @@ import './css/index.scss';
 
 import Navbar from './widget/navbar';
 import AdminPages from './pages/admin/pages';
+import AdminUINav from './pages/admin/ui-nav';
 import AdminUINew from './pages/admin/ui-new';
+import AdminUIEdit from './pages/admin/ui-edit';
+
+import RenderDynamicPage from './pages/renderdynamicpage';
+import RenderSpecialPage from './pages/renderspecialpage';
 function App() {
 
     return (
@@ -50,17 +55,31 @@ function App() {
                           </React.StrictMode>
                       }/>
 
+                      <Route exac path = '/ml-admin/ui/navbar' element={
+                          <React.StrictMode>
+                              <AdminUINav />
+                          </React.StrictMode>
+                      }/>
+
                       <Route exac path = '/ml-admin/ui/new' element={
                           <React.StrictMode>
-                              <AdminUINew />                             
+                              <AdminUINew />
                           </React.StrictMode>
                       }/>
 
                       <Route exac path = '/ml-admin/ui/edit/:page_id' element={
                           <React.StrictMode>
-                          <div className="app-container">
-                              <h1>UI Edit</h1>
-                              </div>
+                              <AdminUIEdit />
+                          </React.StrictMode>
+                      }/>
+                      <Route exac path = ':dynamic_url' element={
+                          <React.StrictMode>
+                              <RenderDynamicPage />
+                          </React.StrictMode>
+                      }/>
+                      <Route exac path = '/' element={
+                          <React.StrictMode>
+                              <RenderSpecialPage />
                           </React.StrictMode>
                       }/>
                 </Routes>

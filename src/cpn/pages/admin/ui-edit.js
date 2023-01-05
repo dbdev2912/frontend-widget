@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
+
+import { useParams } from 'react-router-dom';
 
 import $ from 'jquery';
 import 'jquery-ui-bundle';
@@ -11,8 +13,12 @@ import Link from './texts/link';
 import BlankNav from './widgets/staticNav';
 
 import { auto_id, redirect } from '../../useful';
+import { widgetSelector, pageWidgetSelector } from './widgetSelector';
+
 
 export default () => {
+    const { page_id } = useParams();
+
     const [ page, setPageInfor ] = useState({});
 
     const [ widgets, setWidgets ] = useState([]);
@@ -22,17 +28,20 @@ export default () => {
     const [ content, setContent ] = useState( currentEdittingObject.content )
     const [ size, setSize ] = useState(currentEdittingObject.size);
     const [ currentStyling, setCurrentStyling ] = useState("");
+    const [ linkURL, setLinkURL ] = useState("");
 
     const dispatch = useDispatch();
     const unique_string = useSelector( state => state.unique_string )
+    const pageWidgets = useSelector( state => state.pageWidgets );
 
+    const setPageWidgets = ( widgets ) =>{
+        dispatch({
+            type: "widgets/page/update/state",
+            payload: { widgets },
+        })
+    }
 
     useEffect( ()=> {
-        $('#zone').droppable({
-            drop: function(e, ui){
-
-            }
-        })
 
         fetch(`/api/${unique_string}/navbar`).then( res => res.json() )
         .then( ({ widgets }) => {
@@ -42,7 +51,39 @@ export default () => {
                 payload: { widgets }
             })
         })
-    } , [])
+
+        fetch(`/api/${unique_string}/page/${page_id}`).then( res => res.json() )
+        .then( (data) => {
+            setPageInfor(data.page);
+            console.log(data)
+            dispatch({
+                type: 'initializing/page/widgets',
+                payload: { widgets: data.page ? data.page.widgets : [] }
+            })
+        })
+
+        $('.link-disabled').click( (e) => {
+            e.preventDefault()
+        } )
+    } , []);
+
+    $('#zone').droppable({
+        drop: function(e, ui){
+            const id = $(ui.draggable[0]).attr("id");
+
+            const type = $(`#${id}`).attr("widget-type");
+            let value = $(`#${id}`).attr("value");
+            if( type ==="image" ){
+                value = JSON.parse(value);
+                if( !value.src ){
+                    value.src="/assets/default.jpg"
+                }
+            }
+            setPageWidgets([ ...pageWidgets, pageWidgetSelector(  type, id, value, { size: 14, url: "" }) ]);
+            $(`#${id}`).remove()
+
+        }
+    })
 
     useEffect(() => {
         setColor(currentEdittingObject.color);
@@ -54,6 +95,9 @@ export default () => {
     const renderWidget = (w, key) => {
         return <div key={key}>{w}</div>;
     }
+    const renderPageWidget = (w) => {
+        return w;
+    };
 
     const stylingCurrentObject = ({ attr })=> {
         let font  = currentEdittingObject.font;
@@ -63,7 +107,7 @@ export default () => {
         setCurrentStyling(className);
 
         dispatch({
-            type: "update/current/editting/object/styling",
+            type: "update/current/editting/page/object/styling",
             payload: { attr }
         })
     }
@@ -88,7 +132,7 @@ export default () => {
         const _color = e.target.value;
         currentEdittingObject.setColor( _color )
         dispatch({
-            type: "update/widget/prop/color",
+            type: "update/page/widget/prop/color",
             payload: {
                 id: currentEdittingObject.id,
                 value: _color,
@@ -101,7 +145,7 @@ export default () => {
         const size = e.target.value;
         currentEdittingObject.setSize( size )
         dispatch({
-            type: "update/widget/prop/font/size",
+            type: "update/page/widget/prop/font/size",
             payload: {
                 id: currentEdittingObject.id,
                 value: size,
@@ -114,7 +158,7 @@ export default () => {
         const cnt = e.target.value;
         currentEdittingObject.setContent( cnt );
         dispatch({
-            type: "update/widget/prop/content",
+            type: "update/page/widget/prop/content",
             payload: {
                 id: currentEdittingObject.id,
                 value: cnt,
@@ -124,16 +168,63 @@ export default () => {
     }
 
     const submitNewPage = () => {
+        console.log(pageWidgets)
+        console.log(page);
         fetch(`/api/${ unique_string }/page/update`, {
             method: "post",
             headers: {
                 "content-type": "application/json"
             },
-            body: JSON.stringify({ page: {...page, id: auto_id()} }),
+            body: JSON.stringify({ page: {...page, id: page.id, widgets: pageWidgets.map( w => { return {...w, cpn: null} } )} }),
         }).then(res => res.json()).then(data => {
             alert(`Successfully add page ${page.title}` )
         })
     }
+
+    const changeLinkURL = (e) => {
+        const link = e.target.value;
+        currentEdittingObject.setOtherProps( "url", link );
+        dispatch({
+            type: "update/page/widget/prop/other/url",
+            payload: {
+                id: currentEdittingObject.id,
+                value: link,
+            }
+        })
+        setLinkURL( link );
+    }
+
+    const changeImageContent = ( e ) => {
+        const files = e.target.files;
+        if( files ){
+            const file = files[0];
+
+            const reader = new FileReader();
+
+            reader.readAsDataURL(file);
+
+            reader.onload = (e) => {
+                setContent({ ...content, name: file.name, src: e.target.result });
+
+                dispatch({
+                    type: "update/page/widget/prop/content",
+                    payload: {
+                        id: currentEdittingObject.id,
+                        value: { ...content, name: file.name, src: e.target.result },
+                    }
+                })
+            }
+        }
+    }
+
+    const removeCurrentEdittingObject = () => {
+         dispatch({
+             type: "remove/page/widget",
+             payload: {
+                 id: currentEdittingObject.id,
+             }
+         })
+     }
 
     return (
         <div>
@@ -146,11 +237,11 @@ export default () => {
             <div className="flex m-t-2">
                 <div className="w-40 flex flex-no-wrap flex-middle">
                     <span className="block p-r-1 text-little-bigger">Tiêu đề</span>
-                    <input onChange={ (e) =>{ setPageInfor( {...page, title: e.target.value } ) } } value={ page.title } className="input w-60 text-little-bigger border-bottom-pale text-center w-fill"/>
+                    <input onChange={ (e) =>{ setPageInfor( {...page, title: e.target.value } ) } } value={ page ? page.title : "" } className="input w-60 text-little-bigger border-bottom-pale text-center w-fill"/>
                 </div>
                 <div className="w-40 flex flex-no-wrap flex-middle">
                     <span className="block p-r-1 text-little-bigger">Đường dẫn</span>
-                    <input onChange={ (e) =>{ setPageInfor( {...page, url: e.target.value } ) } } value={ page.url } className="input w-60 text-little-bigger border-bottom-pale text-center w-fill" spellCheck="false"/>
+                    <span onChange={ (e) =>{ setPageInfor( {...page, url: e.target.value } ) } } className="input w-60 text-little-bigger border-bottom-pale text-center w-fill" spellCheck="false">{ page ? page.url: "/duong/dan/ne" }</span>
                 </div>
                 <div className="flex flex-end ml-auto m-r-1 flex-middle">
                     <button onClick={ submitNewPage } className="button-theme hover text-little-bigger p-t-0-5 p-r-0-5  p-b-0-5  p-l-0-5">Xuất bản</button>
@@ -179,12 +270,19 @@ export default () => {
                         }>Đường dẫn</button>
 
                 </div>
+
                 <div className="block border-bold h-fit-screen w-50 m-t-2 m-l-0-5 no-scroll-x relative" id="zone">
                     <BlankNav width={200}/>
-                    { widgets.map(w => renderWidget(w.widget, w.key)) }
+                    <div className="absolute t-0 l-0">{ widgets.map(w => renderWidget(w.widget, w.key)) }</div>
+                    <div style={{ paddingLeft: "200px" }}>
+                        { pageWidgets && pageWidgets.map( w =>  renderPageWidget( w.cpn ) ) }
+                    </div>
                 </div>
                 <div className="block h-fit-screen w-25 m-t-2 m-l-0-5">
-                    { currentEdittingObject.type ?
+                { currentEdittingObject.type ?
+                    <React.StrictMode>
+                    { currentEdittingObject.type !="image" ?
+
                         <div>
                             <div className="w-80 m-auto">
                                 <label>Nội dung</label>
@@ -200,9 +298,40 @@ export default () => {
                                 <span className="block w-50">Kích cở</span>
                                 <input className="input-outline w-50 text-center" type="number" value={size} onChange={ changeFontSize }/>
                             </div>
+
+                            { currentEdittingObject.type === "link" ?
+                                <div className="w-80 m-auto m-t-2">
+                                    <label>Đường dẫn liên kết</label>
+                                    <input className={"input w-fit text-little-bigger border-bottom-pale text-center w-fill " } spellCheck="false" value={ linkURL } onChange={ changeLinkURL }/>
+                                </div>
+                                : null
+                            }
                         </div>
-                        : null
+                        :
+                        <div className="w-80 m-auto">
+                            <label>Tệp</label>
+                                <div>
+                                { content ?
+                                    <div>
+                                        <input className={"input w-fit text-little-bigger border-bottom-pale text-center w-fill " } spellCheck="false" value={ content.name }
+                                        onClick={ () => { $('#hidden-file-input').click(); } }/>
+                                    </div>
+                                    :
+                                    <div>
+                                        <input className={"input w-fit text-little-bigger border-bottom-pale text-center w-fill " } spellCheck="false"
+                                        onClick={ () => { $('#hidden-file-input').click(); } }/>
+                                    </div>
+                                }
+                                    <input className="hidden" id="hidden-file-input" type="file" onChange={ changeImageContent }/>
+                                </div>
+                        </div>
                     }
+                        <div className="w-80 flex flex-no-wrap flex-end m-auto m-t-1">
+                            <button onClick={ ()=>{ removeCurrentEdittingObject() } } className="m-l-1 button-red">Rì mu</button>
+                        </div>
+                    </React.StrictMode>
+                    : null
+                }
 
                 </div>
 

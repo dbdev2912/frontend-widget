@@ -1,7 +1,8 @@
 class widget{
-    constructor(type, content=""){
+    constructor(type, id, content=""){
         this.content = content;
         this.type = type;
+        this.id = id;
         this.font = {
             is_bold: false,
             is_italic: false,
@@ -9,6 +10,9 @@ class widget{
         };
         this.color = "#000";
         this.size  = 14;
+        this.otherProps = {
+            url: ""
+        }
     }
 
     setContent = (content) => {
@@ -27,6 +31,9 @@ class widget{
         this.size = size;
     }
 
+    setOtherProps = ( attr, value ) => {
+        this.otherProps[attr] = value;
+    }
 
 
     getAll = () => {

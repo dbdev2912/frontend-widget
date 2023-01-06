@@ -279,7 +279,7 @@ export default () => {
                             </div>
                         }
                             <div className="w-80 flex flex-no-wrap flex-end m-auto m-t-1">
-                                <button onClick={ ()=>{ removeCurrentEdittingObject() } } className="m-l-1 button-red">Rì mu</button>
+                                <button onClick={ ()=>{ removeCurrentEdittingObject() } } className="m-l-1 button-red">Xóa</button>
                             </div>
                         </React.StrictMode>
                         : null

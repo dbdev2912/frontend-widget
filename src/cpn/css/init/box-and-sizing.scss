@@ -290,8 +290,8 @@ table{
     }
     thead tr{
         &:nth-child(1){
-            background-color: $theme-color;
-            color: $white;
+            background-color: white;
+            color: $theme-color;
         }
     }
 }
@@ -300,6 +300,6 @@ table{
 .widget-edit{
     width: fit-content;
     .draggable{
-        
+
     }
 }

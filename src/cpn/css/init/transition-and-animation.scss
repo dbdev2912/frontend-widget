@@ -4,7 +4,7 @@
 }
 
 .theme-hightlight{
-    background: $theme-color;
+    background: $theme-color !important;
     color: $white;
 
     &:hover{

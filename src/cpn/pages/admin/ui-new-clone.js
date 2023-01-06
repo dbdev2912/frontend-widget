@@ -9,7 +9,6 @@ import 'jquery-ui-bundle/jquery-ui.min.css';
 
 import Text from './texts/text';
 import Link from './texts/link';
-import Table from './widgets/table';
 
 import BlankNav from './widgets/staticNav';
 
@@ -50,16 +49,6 @@ export default () => {
             dispatch({
                 type: 'initializing/static/navbar/widgets',
                 payload: { widgets }
-            })
-        })
-
-        fetch(`/api/${unique_string}/page/${page_id}`).then( res => res.json() )
-        .then( (data) => {
-            setPageInfor(data.page);
-            
-            dispatch({
-                type: 'initializing/page/widgets',
-                payload: { widgets: data.page ? data.page.widgets : [] }
             })
         })
 
@@ -242,7 +231,7 @@ export default () => {
                 </div>
                 <div className="w-40 flex flex-no-wrap flex-middle">
                     <span className="block p-r-1 text-little-bigger">Đường dẫn</span>
-                    <span onChange={ (e) =>{ setPageInfor( {...page, url: e.target.value } ) } } className="input w-60 text-little-bigger border-bottom-pale text-center w-fill" spellCheck="false">{ page ? page.url: "/duong/dan/ne" }</span>
+                    <input onChange={ (e) =>{ setPageInfor( {...page, url: e.target.value } ) } } value={ page.url } className="input w-60 text-little-bigger border-bottom-pale text-center w-fill" spellCheck="false"/>
                 </div>
                 <div className="flex flex-end ml-auto m-r-1 flex-middle">
                     <button onClick={ submitNewPage } className="button-theme hover text-little-bigger p-t-0-5 p-r-0-5  p-b-0-5  p-l-0-5">Xuất bản</button>
@@ -252,7 +241,7 @@ export default () => {
             <hr className="block border-bold"/>
             <div className="flex flex-no-wrap">
                 <div className="block h-fit-screen w-25 m-t-2 m-l-0-5">
-                    <h1 className="block">Văn bản</h1>
+                    <h1 className="">Văn bản</h1>
                     <button className="button-theme hover text-little-bigger p-t-0-5 p-r-0-5  p-b-0-5  p-l-0-5 m-r-1"
                         id="text"
                         onClick= {
@@ -270,16 +259,8 @@ export default () => {
                             }
                         }>Đường dẫn</button>
 
-                    <h1 className="block">Khối</h1>
-                    <button className="button-theme hover text-little-bigger p-t-0-5 p-r-0-5  p-b-0-5  p-l-0-5 m-r-1"
-                        id="text"
-                        onClick= {
-                            ()=>{
-                                const id = auto_id();
-                                setWidgets([...widgets, {widget: <Table id={id}/>, key: id}])
-                            }
-                        }>Bảng</button>
                 </div>
+
                 <div className="block border-bold h-fit-screen w-50 m-t-2 m-l-0-5 no-scroll-x relative" id="zone">
                     <BlankNav width={200}/>
                     <div className="absolute t-0 l-0">{ widgets.map(w => renderWidget(w.widget, w.key)) }</div>

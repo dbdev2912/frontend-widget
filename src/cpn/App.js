@@ -13,10 +13,12 @@ import 'jquery-ui-bundle/jquery-ui.min.css';
 
 import './css/index.scss';
 
+import AdminRelations from './pages/admin/relations';
+
 import Navbar from './widget/navbar';
 import AdminPages from './pages/admin/pages';
 import AdminUINav from './pages/admin/ui-nav';
-import AdminUINew from './pages/admin/ui-new';
+import AdminUINew from './pages/admin/ui-new-clone';
 import AdminUIEdit from './pages/admin/ui-edit';
 
 import RenderDynamicPage from './pages/renderdynamicpage';
@@ -41,8 +43,8 @@ function App() {
                           <React.StrictMode>
                           <div className="app-container">
                                 <Navbar />
-                                <h1>Database</h1>
-                                 </div>
+                                <AdminRelations />
+                            </div>
                           </React.StrictMode>
                       }/>
 

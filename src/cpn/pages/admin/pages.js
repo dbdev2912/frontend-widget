@@ -11,6 +11,8 @@ export default () => {
     const [ pages, setPages ] = useState([
         { title: "Menu chung", edit_url: '/ml-admin/ui/navbar', url: "Khum có", last_change: "Hôm qua lúc 16:54 - Cập nhật đủ thứ" }
     ])
+
+    const [ pageDisplayList, setPageDisplayList ] = useState([])
     useEffect(() => {
         const height = window.innerHeight - $('#top-section').height() - 75;
         setTableHeight(height)
@@ -19,9 +21,17 @@ export default () => {
             const pageListFormated = pageList.map( page => {
                 return { ...page, edit_url: `/ml-admin/ui/edit/${page.id}` }
             })
+            setPageDisplayList([...pages, ...pageListFormated]);
             setPages([...pages, ...pageListFormated])
         })
     }, [])
+
+
+    const pageFilter = (e) => {
+        const criteria = e.target.value;
+        const newDisplay = pages.filter( p => p.title.includes( criteria ) || p.url.includes(criteria) );
+        setPageDisplayList(newDisplay);
+    }
 
     return(
         <div className="p-l-1 p-t-1 p-r-1 p-b-1 container-fluid">
@@ -33,7 +43,7 @@ export default () => {
                     </div>
                 </div>
                 <div className="w-50 flex flex-middle">
-                    <input placeholder="Search" className="border-pale border-radius-0-5 p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5 w-fit"/>
+                    <input placeholder="Search" className="border-pale border-radius-0-5 p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5 w-fit" onChange={ pageFilter }/>
                 </div>
             </div>
 
@@ -48,8 +58,8 @@ export default () => {
                     </thead>
 
                     <tbody>
-                    { pages.map( page =>
-                        <tr className="hover" onClick={ () => { openTab(page.edit_url) } }>
+                    { pageDisplayList.map( page =>
+                        <tr className="hover" onClick={ () => { openTab(page.edit_url) } } key={ page.id }>
                             <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">{page.title}</td>
                             <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">{page.url}</td>
                             <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">{page.last_change ?page.last_change: " " }</td>
@@ -59,6 +69,7 @@ export default () => {
                     </tbody>
                 </table>
             </div>
+
         </div>
     )
 }

@@ -142,7 +142,6 @@ const initializingPageWidgets = (state, action) => {
         let { id, state, type, value } = w.props;
         return pageWidgetSelector( type, id, value, state );
     });
-    console.log(navWidgets)
 
     return { ...state, pageWidgets: navWidgets }
 }

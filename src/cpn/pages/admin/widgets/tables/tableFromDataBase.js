@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { widgetSelector } from '../../widgetSelector';
 
-export default () => {
+export default (props) => {
+
+    const { func, _id } = props;
 
     const [ tables, setTables ] = useState([]);
     const [ table, setTable ] = useState([]);
@@ -17,7 +20,10 @@ export default () => {
     const innerDropdownTrigger = () => {
         setInnerHeight( innerDrop? 0: 200 )
         setInnerDrop( !innerDrop )
-        console.log(table)
+    }
+
+    const setTableAsCurrentEdittingObject = () => {
+        func(widgetSelector('table', _id, null, { table: table }))
     }
 
     return(
@@ -49,6 +55,12 @@ export default () => {
                 </div>
             </div>
 
+            { table.name ?
+                <div className="w-80 m-t-1">
+                   <button onClick={ setTableAsCurrentEdittingObject } className="button-theme block ml-auto p-t-0-5 p-b-0-5 p-l-1 p-r-1">Thêm</button>
+                </div>
+                : null
+            }
 
         </div>
     )

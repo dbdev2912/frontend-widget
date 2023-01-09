@@ -91,7 +91,7 @@ export default (props) => {
                     <div className="flex flex-end m-t-1">
                         <div className="flex p-t-0-5 p-l-0-5 p-b-0-5 p-r-0-5 border-radius-0-5 button-theme border-pale" onClick={ saveState }>
                             <div className="flex flex-middle">
-                                <span className="block">Save</span>
+                                <span className="block">Lưu</span>
                             </div>
                             <div className="flex flex-middle">
                                 <img className="drop-icon m-l-1" src = "/icon/save.png" />
@@ -100,7 +100,7 @@ export default (props) => {
                     </div>
                     <div className="flex flex-no-wrap m-t-1">
                         <div className="w-50 flex flex-middle">
-                            <span className="text-left">Field Name</span>
+                            <span className="text-left">Tên trường</span>
                         </div>
                         <div className="w-50">
                             <input className="input-outline border-bottom-pale p-t-0-5 p-l-0-5 p-b-0-5  block w-fit" value={ field.name } onChange={ (e) =>{ setField( {...field, name: e.target.value} )} } />
@@ -109,7 +109,7 @@ export default (props) => {
 
                     <div className="flex flex-no-wrap  m-t-1">
                         <div className="w-50 flex flex-middle">
-                            <span className="text-left">Data type</span>
+                            <span className="text-left">Kiểu dữ liệu</span>
                         </div>
                         <div className="w-50">
                             <div className="relative index-3">
@@ -144,17 +144,17 @@ export default (props) => {
                                     <input type="checkbox" checked={ field.is_primary } onChange={ () => { setField({ ...field, is_primary: !field.is_primary }) } }/>
                                 </div>
                                 <div className="flex flex-middle">
-                                    <span>Primary key</span>
+                                    <span>Khoá chính</span>
                                 </div>
                             </div>
                         </div>
                         <div className="w-50">
                             <div className="w-fit flex flex-no-wrap">
                                 <div className="flex flex-middle">
-                                    <input type="checkbox" checked={ field.is_visible } onChange={ () => { setField({ ...field, is_visible: !field.is_visible }) } }/>
+                                    <input type="checkbox" />
                                 </div>
                                 <div className="flex flex-middle">
-                                    <span>Visible</span>
+                                    <span>Duy nhất</span>
                                 </div>
                             </div>
                         </div>
@@ -167,7 +167,7 @@ export default (props) => {
                                     <input type="checkbox" checked={ field.is_sort_index } onChange={ () => { setField({ ...field, is_sort_index: !field.is_sort_index }) } }/>
                                 </div>
                                 <div className="flex flex-middle">
-                                    <span>Sort index</span>
+                                    <span>Sắp xếp</span>
                                 </div>
                             </div>
                         </div>
@@ -177,7 +177,7 @@ export default (props) => {
                                     <input type="checkbox" checked={ field.is_search_index } onChange={ () => { setField({ ...field, is_search_index: !field.is_search_index }) } }/>
                                 </div>
                                 <div className="flex flex-middle">
-                                    <span>Search index</span>
+                                    <span>Tìm kiếm</span>
                                 </div>
                             </div>
                         </div>
@@ -186,10 +186,10 @@ export default (props) => {
                         <div className="w-50">
                             <div className="w-fit flex flex-no-wrap">
                                 <div className="flex flex-middle">
-                                    <input type="checkbox" />
+                                    <input type="checkbox" checked={ field.is_visible } onChange={ () => { setField({ ...field, is_visible: !field.is_visible }) } }/>
                                 </div>
                                 <div className="flex flex-middle">
-                                    <span>Unique</span>
+                                    <span>Hiển thị</span>
                                 </div>
                             </div>
                         </div>
@@ -207,11 +207,11 @@ export default (props) => {
 
                     <div className="m-t-2">
 
-                        <span>Foreign keys</span>
+                        <span>Khoá ngoại</span>
 
                         <div className="flex flex-no-wrap w-fit m-t-2">
                             <div className="w-50 flex flex-middle">
-                                <span className="block text-theme">Relation</span>
+                                <span className="block text-theme">Quan hệ</span>
                             </div>
                             <div className="w-50 flex flex-middle relative index-2" onClick={ dropForeignKey }>
 
@@ -231,7 +231,7 @@ export default (props) => {
 
                         <div className="flex flex-no-wrap w-fit m-t-2">
                             <div className="w-50 flex flex-middle">
-                                <span className="block text-theme">References on</span>
+                                <span className="block text-theme">Trường</span>
                             </div>
                             <div className="w-50 flex flex-middle relative index-3" onClick={  dropForeignKeyRefs }>
 

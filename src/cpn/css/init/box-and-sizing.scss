@@ -296,6 +296,30 @@ table{
     }
 }
 
+.table-resizble{
+    &::-webkit-scrollbar{
+        height: 3px;
+    }
+
+    td{
+        min-width: 125px;
+    }
+
+    th{
+        border: 1px solid #000;
+        .th-label{
+            display: block;
+            width: inherit;
+        }
+    }
+
+    th:hover{
+        background-color: $theme-color;
+        color: $white;
+        cursor: pointer;
+    }
+}
+
 
 .widget-edit{
     width: fit-content;

@@ -6,7 +6,7 @@ import TableFromDB from './tables/tableFromDataBase';
 
 export default ( props ) => {
     const type = "image";
-    const { id } = props
+    const { id, func } = props
 
     const [ tableType, setTableType ] = useState(0);
 
@@ -26,6 +26,10 @@ export default ( props ) => {
     const innerDropdownTrigger = () => {
         setInnerHeight( innerDrop? 0: 200 )
         setInnerDrop( !innerDrop )
+    }
+    const middleFunc = (widget) => {
+        func(widget)
+        $(`#${id}`).remove();
     }
 
     return(
@@ -62,7 +66,7 @@ export default ( props ) => {
 
                         { tableType.id === 1 ?
                             <div className="relative index-5">
-                                <TableFromDB />
+                                <TableFromDB func={ middleFunc } _id={ id }/>
                             </div>
                             : null
                         }

@@ -56,7 +56,7 @@ export default () => {
         fetch(`/api/${unique_string}/page/${page_id}`).then( res => res.json() )
         .then( (data) => {
             setPageInfor(data.page);
-            
+
             dispatch({
                 type: 'initializing/page/widgets',
                 payload: { widgets: data.page ? data.page.widgets : [] }
@@ -86,11 +86,33 @@ export default () => {
         }
     })
 
+    const setPageWidgetFromOutsideZone = ( widget ) => {
+        setPageWidgets([ ...pageWidgets, widget ]);
+    }
+
+
     useEffect(() => {
         setColor(currentEdittingObject.color);
         setContent(currentEdittingObject.content);
         setSize(currentEdittingObject.size);
 
+        if( currentEdittingObject.type === "table" ){
+            const { id } = currentEdittingObject;
+            $(`#${id} th`).resizable({
+                grid: [1, 10000],
+                resize: (e, ui) => {
+                    const fieldName = $(ui.element[0]).attr('field');
+                    const { width } = ui.size;
+
+                    dispatch({
+                        type: '/update/table/state',
+                        payload: {
+                            id, fieldName, width
+                        }
+                    })
+                }
+            });
+        }
     }, [currentEdittingObject])
 
     const renderWidget = (w, key) => {
@@ -169,8 +191,8 @@ export default () => {
     }
 
     const submitNewPage = () => {
-        console.log(pageWidgets)
-        console.log(page);
+        // console.log(pageWidgets)
+        // console.log(page);
         fetch(`/api/${ unique_string }/page/update`, {
             method: "post",
             headers: {
@@ -276,7 +298,7 @@ export default () => {
                         onClick= {
                             ()=>{
                                 const id = auto_id();
-                                setWidgets([...widgets, {widget: <Table id={id}/>, key: id}])
+                                setWidgets([...widgets, {widget: <Table func={setPageWidgetFromOutsideZone} id={id}/>, key: id}])
                             }
                         }>Bảng</button>
                 </div>
@@ -293,28 +315,37 @@ export default () => {
                     { currentEdittingObject.type !="image" ?
 
                         <div>
-                            <div className="w-80 m-auto">
-                                <label>Nội dung</label>
-                                <input className={"input w-fit text-little-bigger border-bottom-pale text-center w-fill " } spellCheck="false" value={ content } onChange={ changeContent }/>
-                            </div>
-                            <div className="w-80 flex flex-no-wrap flex-end m-auto m-t-1">
-                                <input type="color" style={{ fontSize: "1.25em", width: "2em", height: "2em", border: "none", outline: "none" }} onChange={ setCurrentStylingColor } value={ color ? color : "#000" } />
-                                <button onClick={ ()=>{ stylingCurrentObject( { attr: "is_bold" } ) } } className="m-l-1" style={{ fontSize: "1.25em", width: "2em", height: "2em" }}><b>B</b></button>
-                                <button onClick={ ()=>{ stylingCurrentObject( { attr: "is_italic" } ) } } className="m-l-1" style={{ fontSize: "1.25em", width: "2em", height: "2em" }}><i>I</i></button>
-                                <button onClick={ ()=>{ stylingCurrentObject( { attr: "is_underline"} ) } } className="m-l-1" style={{ fontSize: "1.25em", width: "2em", height: "2em" }}><u>U</u></button>
-                            </div>
-                            <div className=" w-80 flex flex-no-wrap m-auto m-t-1">
-                                <span className="block w-50">Kích cở</span>
-                                <input className="input-outline w-50 text-center" type="number" value={size} onChange={ changeFontSize }/>
-                            </div>
-
-                            { currentEdittingObject.type === "link" ?
-                                <div className="w-80 m-auto m-t-2">
-                                    <label>Đường dẫn liên kết</label>
-                                    <input className={"input w-fit text-little-bigger border-bottom-pale text-center w-fill " } spellCheck="false" value={ linkURL } onChange={ changeLinkURL }/>
+                        { currentEdittingObject.type !="table"?
+                            <React.StrictMode>
+                                <div className="w-80 m-auto">
+                                    <label>Nội dung</label>
+                                    <input className={"input w-fit text-little-bigger border-bottom-pale text-center w-fill " } spellCheck="false" value={ content } onChange={ changeContent }/>
                                 </div>
-                                : null
-                            }
+                                <div className="w-80 flex flex-no-wrap flex-end m-auto m-t-1">
+                                    <input type="color" style={{ fontSize: "1.25em", width: "2em", height: "2em", border: "none", outline: "none" }} onChange={ setCurrentStylingColor } value={ color ? color : "#000" } />
+                                    <button onClick={ ()=>{ stylingCurrentObject( { attr: "is_bold" } ) } } className="m-l-1" style={{ fontSize: "1.25em", width: "2em", height: "2em" }}><b>B</b></button>
+                                    <button onClick={ ()=>{ stylingCurrentObject( { attr: "is_italic" } ) } } className="m-l-1" style={{ fontSize: "1.25em", width: "2em", height: "2em" }}><i>I</i></button>
+                                    <button onClick={ ()=>{ stylingCurrentObject( { attr: "is_underline"} ) } } className="m-l-1" style={{ fontSize: "1.25em", width: "2em", height: "2em" }}><u>U</u></button>
+                                </div>
+                                <div className=" w-80 flex flex-no-wrap m-auto m-t-1">
+                                    <span className="block w-50">Kích cở</span>
+                                    <input className="input-outline w-50 text-center" type="number" value={size} onChange={ changeFontSize }/>
+                                </div>
+
+                                { currentEdittingObject.type === "link" ?
+                                    <div className="w-80 m-auto m-t-2">
+                                        <label>Đường dẫn liên kết</label>
+                                        <input className={"input w-fit text-little-bigger border-bottom-pale text-center w-fill " } spellCheck="false" value={ linkURL } onChange={ changeLinkURL }/>
+                                    </div>
+                                    : null
+                                }
+                            </React.StrictMode>
+                            :
+                            <div className="w-80 m-auto">
+                                <h1>Table config</h1>
+                            </div>
+                        }
+
                         </div>
                         :
                         <div className="w-80 m-auto">

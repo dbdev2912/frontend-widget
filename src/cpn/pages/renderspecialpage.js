@@ -31,6 +31,7 @@ export default () => {
             body: JSON.stringify({ dynamic_url: "" }),
         }).then( res => res.json() ).then( data => {
             $('#title').text(data.page.title);
+
             dispatch({
                 type: 'initializing/static/page/widgets',
                 payload: { widgets: data.page ? data.page.widgets: [] }
@@ -46,7 +47,7 @@ export default () => {
         <div>
             <BlankNav width={300}/>
             <div className="app-container">
-                { pageWidgets && pageWidgets.map( w =>  renderPageWidget( w.cpn ) ) }
+                { pageWidgets && pageWidgets.map( w =>  renderPageWidget( w && w.cpn ) ) }
             </div>
         </div>
     )

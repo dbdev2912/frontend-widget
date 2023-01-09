@@ -111,6 +111,10 @@ export default ( state = initState, action ) => {
             return updatePageWidgetOtherPropsURL( state, action );
             break;
 
+        case '/update/table/state':
+            return updateTableState( state, action );
+            break;
+
         case "remove/widget":
             return removeWidget( state, action );
             break;
@@ -118,6 +122,8 @@ export default ( state = initState, action ) => {
         case "remove/page/widget":
             return removePageWidget( state, action );
             break;
+
+
 
         default:
             return state;
@@ -142,6 +148,7 @@ const initializingPageWidgets = (state, action) => {
         let { id, state, type, value } = w.props;
         return pageWidgetSelector( type, id, value, state );
     });
+    console.log( navWidgets )
 
     return { ...state, pageWidgets: navWidgets }
 }
@@ -322,7 +329,6 @@ const updatePageWidgetColor = ( state, action ) => {
     return { ...state, pageWidgets: [...state.pageWidgets] }
 }
 
-
 const updateWidgetFontSize = ( state, action ) => {
     const { id,  value } = action.payload;
     let widget = state.navWidgets.filter( w => w.id === id )[0];
@@ -397,6 +403,23 @@ const updatePageWidgetOtherPropsURL = ( state, action ) => {
     state.pageWidgets[index] = newWidget;
 
     return { ...state, pageWidgets: [...state.pageWidgets] }
+}
+
+const updateTableState = ( state, action ) => {
+    const { id, fieldName, width } = action.payload;
+
+    const widgets = state.pageWidgets;
+    const widget = widgets.filter( w => w.id === id )[0];
+    const index = state.pageWidgets.indexOf( widget );
+
+    const fields = widget.props.state.table.fields;
+    const field = fields.filter( f => f.name === fieldName )[0];
+    const fieldIndex = fields.indexOf(field);
+    field.width = width;
+    fields[fieldIndex] = field;
+    widget.props.state.table.fields = fields;
+    widgets[index] = widget;
+    return { ...state, pageWidgets: widgets }
 }
 
 const removeWidget = (state, action) => {

@@ -1,4 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import $ from 'jquery';
+import 'jquery-ui-bundle';
+import 'jquery-ui-bundle/jquery-ui.min.css';
 
 const widgetSelector = ( type, id, value, state = {} ) => {
     switch (type) {
@@ -26,6 +30,16 @@ const widgetSelector = ( type, id, value, state = {} ) => {
             return {
                 id: id,
                 cpn: <Image key={ id } state={ state } type={ type } id={id} value = { value }/>,
+                props: {
+                    id, state, type, value
+                }
+            }
+            break;
+
+        case "table":
+            return {
+                id: id,
+                cpn: <Table key={ id } state={ state } type={ type } id={id} value = { value }/>,
                 props: {
                     id, state, type, value
                 }
@@ -67,6 +81,15 @@ const staticWidgetSelector = ( type, id, value, state = {} ) => {
                 }
             }
             break;
+        case "table":
+            return {
+                id: id,
+                cpn: <StaticTable key={ id } state={ state } type={ type } id={id} value = { value }/>,
+                props: {
+                        id, state, type, value
+                }
+            }
+            break;
         default:
             return null;
     }
@@ -100,6 +123,15 @@ const pageWidgetSelector = ( type, id, value, state = {} ) => {
                 cpn: <PageImage key={ id } state={ state } type={ type } id={id} value = { value }/>,
                 props: {
                     id, state, type, value
+                }
+            }
+            break;
+        case "table":
+            return {
+                id: id,
+                cpn: <PageTable key={ id } state={ state } type={ type } id={id} value = { value }/>,
+                props: {
+                        id, state, type, value
                 }
             }
             break;
@@ -155,6 +187,59 @@ const Image = (props) => {
     )
 }
 
+const Table = ( props ) => {
+    const { id, type, value, state } = props;
+    const dispatch = useDispatch();
+    const  [data, setData] = useState([]);
+
+    useEffect(() => {
+        fetch(`/api/${state.table.name}/data`).then(res => res.json())
+        .then( ({ data }) => {
+            setData( data );
+        })
+    }, [])
+
+    return(
+        <div id={id} onClick={ () => { dispatch({
+            type: "set/current/editting/object",
+            payload: {
+                type, content: value, id
+            }
+        }) } } className="block p-t-0-5 p-r-0-5 p-l-0-5 p-b-0-5 w-fit table-resizble" style={{ overflowX: "auto" }}>
+            <table className="w-fit no-border">
+                <thead>
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5" style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => {console.log( f )} }>{ f.name }</span></th>
+                        ) }
+                    </tr>
+                </thead>
+                <tbody>
+                    { data.length > 0 ?
+                        data.map( d =>
+                        <tr>
+                            { state.table && state.table.fields.map(
+                                f =>
+                                <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">{ d[f.name] }</td>
+                            ) }
+                        </tr>
+                    )
+                    :
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">Văn bản mẫu</td>
+                        ) }
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
 const PageText = ( props ) => {
     const { id, type, value, state } = props;
     const dispatch = useDispatch();
@@ -202,6 +287,59 @@ const PageImage = (props) => {
     )
 }
 
+const PageTable = ( props ) => {
+    const { id, type, value, state } = props;
+    const dispatch = useDispatch();
+    const  [data, setData] = useState([]);
+
+    useEffect(() => {
+        fetch(`/api/${state.table.name}/data`).then(res => res.json())
+        .then( ({ data }) => {
+            setData( data );
+        })
+    }, [])
+
+    return(
+        <div id={id} onClick={ () => { dispatch({
+            type: "set/current/editting/object",
+            payload: {
+                type, content: value, id
+            }
+        }) } } className="block p-t-0-5 p-r-0-5 p-l-0-5 p-b-0-5 w-fit table-resizble" style={{ overflowX: "auto" }}>
+            <table className="w-fit no-border">
+                <thead>
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5" style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => {console.log( f )} }>{ f.name }</span></th>
+                        ) }
+                    </tr>
+                </thead>
+                <tbody>
+                    { data.length > 0 ?
+                        data.map( d =>
+                        <tr>
+                            { state.table && state.table.fields.map(
+                                f =>
+                                <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">{ d[f.name] }</td>
+                            ) }
+                        </tr>
+                    )
+                    :
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">Văn bản mẫu</td>
+                        ) }
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
 const StaticText = ( props ) => {
     const { id, type, value, state } = props;
     const dispatch = useDispatch();
@@ -230,6 +368,53 @@ const StaticImage = (props) => {
     return(
         <div id={id} className="block p-t-0-5 p-r-0-5 p-l-0-5 p-b-0-5">
             <img src={ value.src } className="block w-80 m-auto"/>
+        </div>
+    )
+}
+
+const StaticTable = ( props ) => {
+    const { id, type, value, state } = props;
+    const dispatch = useDispatch();
+    const  [data, setData] = useState([]);
+    useEffect(() => {
+        fetch(`/api/${state.table.name}/data`).then(res => res.json())
+        .then( ({ data }) => {
+            setData( data );
+        })
+    }, [])
+
+    return(
+        <div id={id} className="block p-t-0-5 p-r-0-5 p-l-0-5 p-b-0-5 w-fit table-resizble" style={{ overflowX: "auto" }}>
+            <table className="w-fit no-border">
+                <thead>
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5" style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => {console.log( f )} }>{ f.name }</span></th>
+                        ) }
+                    </tr>
+                </thead>
+                <tbody>
+                    { data.length > 0 ?
+                        data.map( d =>
+                        <tr>
+                            { state.table && state.table.fields.map(
+                                f =>
+                                <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">{ d[f.name] }</td>
+                            ) }
+                        </tr>
+                    )
+                    :
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">Văn bản mẫu</td>
+                        ) }
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
         </div>
     )
 }

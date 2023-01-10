@@ -199,6 +199,11 @@ const Table = ( props ) => {
         })
     }, [])
 
+    const setCurrentEdittingField = (field) => {
+        console.log(id);
+        console.log(field)
+    }
+
     return(
         <div id={id} onClick={ () => { dispatch({
             type: "set/current/editting/object",
@@ -211,7 +216,7 @@ const Table = ( props ) => {
                     <tr>
                         { state.table && state.table.fields.map(
                             f =>
-                            <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5" style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => {console.log( f )} }>{ f.name }</span></th>
+                            <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5" style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => { setCurrentEdittingField(f) } }>{ f.name }</span></th>
                         ) }
                     </tr>
                 </thead>
@@ -299,6 +304,11 @@ const PageTable = ( props ) => {
         })
     }, [])
 
+    const setCurrentEdittingField = (field) => {
+        console.log(id);
+        console.log(field)
+    }
+
     return(
         <div id={id} onClick={ () => { dispatch({
             type: "set/current/editting/object",
@@ -311,7 +321,7 @@ const PageTable = ( props ) => {
                     <tr>
                         { state.table && state.table.fields.map(
                             f =>
-                            <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5" style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => {console.log( f )} }>{ f.name }</span></th>
+                            <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5" style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => {setCurrentEdittingField( f )} }>{ f.name }</span></th>
                         ) }
                     </tr>
                 </thead>

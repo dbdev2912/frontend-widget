@@ -15,7 +15,15 @@ const initState = {
 
     navWidgets: [],
 
-    pageWidgets: []
+    pageWidgets: [],
+
+    apiTables: [],
+    currentEdittingTable: {
+
+    },
+    currentEdittingField: {
+
+    }
 }
 
 export default ( state = initState, action ) => {
@@ -53,7 +61,6 @@ export default ( state = initState, action ) => {
 
             return setCuurrentEdditingPageObject( state, action )
             break;
-
 
         case "update/current/editting/object/styling":
             return updateCurrentEdittingObjectStyling( state, action )
@@ -123,7 +130,17 @@ export default ( state = initState, action ) => {
             return removePageWidget( state, action );
             break;
 
+        case "update/API/table/state":
+            return { ...state, apiTables: [ ...state.apiTables, action.payload.table ] };
+            break;
 
+        case "set/current/editting/table":
+            return setCurrentEdittingTable( state, action );
+            break;
+
+        case "update/current/table/fields/state":
+            return updateCurrentTableFieldsState( state, action );
+            break;
 
         default:
             return state;
@@ -148,7 +165,6 @@ const initializingPageWidgets = (state, action) => {
         let { id, state, type, value } = w.props;
         return pageWidgetSelector( type, id, value, state );
     });
-    console.log( navWidgets )
 
     return { ...state, pageWidgets: navWidgets }
 }
@@ -436,4 +452,20 @@ const removePageWidget = (state, action) => {
     const newPageWidgets = state.pageWidgets.filter( w => w.id !== id );
 
     return { ...state, pageWidgets: newPageWidgets, currentEdittingObject: {} }
+}
+
+const setCurrentEdittingTable = (state, action) => {
+    const { table, field } = action.payload;
+
+    return { ...state, currentEdittingTable: table, currentEdittingField: field }
+
+}
+
+const updateCurrentTableFieldsState = ( state, action ) => {
+    const { table, field, value } = action.payload;
+    const tableIndex = state.apiTables.indexOf(table);
+    const index = table.fields.indexOf(field);
+    table.fields[index].is_hidden = value;
+    state.apiTables[tableIndex] = table;
+    return { ...state, apiTables: [...state.apiTables], currentEdittingTable: {...table} }
 }

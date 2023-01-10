@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import $ from 'jquery';
 
 import TableFromDB from './tables/tableFromDataBase';
-
+import TableFromAPI from './tables/tableFromAPI';
 
 export default ( props ) => {
     const type = "image";
@@ -42,7 +42,7 @@ export default ( props ) => {
                         </div>
                         <div className="w-80 m-t-1 relative index-6">
                             <div className="relative index-3">
-                                <span className="block w-fit border-bottom-pale text-left text-little-bigger">{  tableType.label? tableType.label: "Chọn dùm một cái trời ơi"  }</span>
+                                <span className="block w-fit border-bottom-pale text-left text-little-bigger">{  tableType.label? tableType.label: " "  }</span>
                                 { innerDrop ?
                                     <React.StrictMode>
                                         <img className="icon absolute drop-icon" src = "/icon/drop.png" onClick={ innerDropdownTrigger }/>
@@ -72,7 +72,7 @@ export default ( props ) => {
                         }
                         { tableType.id === 2 ?
                             <div>
-                                <h1>{ tableType.label }</h1>
+                                <TableFromAPI func={ middleFunc } _id={ id } />
                             </div>
                             : null
                         }

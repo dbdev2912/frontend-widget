@@ -15,9 +15,9 @@ export default ( props ) => {
 
 
     return(
-        <div className="w-80 mg-auto mg-t-1 form-small">
+        <div className="w-80 m-auto m-t-1 form-small">
             <label className="block text-little-bigger">{ field.name } { field.is_primary ? <span className="text-theme">*</span>: null } </label>
-            <div className="flex flex-no-wrap mg-t-1">
+            <div className="flex flex-no-wrap m-t-1">
                 <div className="w-50">
                     <div className="w-fit flex flex-no-wrap">
                         <div className="flex flex-middle">

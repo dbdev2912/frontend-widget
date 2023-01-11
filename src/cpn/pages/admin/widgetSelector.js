@@ -45,6 +45,16 @@ const widgetSelector = ( type, id, value, state = {} ) => {
                 }
             }
             break;
+
+        case "api-table":
+            return {
+                id: id,
+                cpn: <APITable key={ id } state={ state } type={ type } id={id} value = { value }/>,
+                props: {
+                    id, state, type, value
+                }
+            }
+                break;
         default:
             return null;
     }
@@ -90,6 +100,15 @@ const staticWidgetSelector = ( type, id, value, state = {} ) => {
                 }
             }
             break;
+        case "api-table":
+            return {
+                id: id,
+                cpn: <APIStaticTable key={ id } state={ state } type={ type } id={id} value = { value }/>,
+                props: {
+                    id, state, type, value
+                }
+            }
+            break;
         default:
             return null;
     }
@@ -132,6 +151,16 @@ const pageWidgetSelector = ( type, id, value, state = {} ) => {
                 cpn: <PageTable key={ id } state={ state } type={ type } id={id} value = { value }/>,
                 props: {
                         id, state, type, value
+                }
+            }
+            break;
+
+        case "api-table":
+            return {
+                id: id,
+                cpn: <APIPageTable key={ id } state={ state } type={ type } id={id} value = { value }/>,
+                props: {
+                    id, state, type, value
                 }
             }
             break;
@@ -196,6 +225,69 @@ const Table = ( props ) => {
         fetch(`/api/${state.table.name}/data`).then(res => res.json())
         .then( ({ data }) => {
             setData( data );
+        })
+    }, [])
+
+    const setCurrentEdittingField = (field) => {
+        console.log(id);
+        console.log(field)
+    }
+
+    return(
+        <div id={id} onClick={ () => { dispatch({
+            type: "set/current/editting/object",
+            payload: {
+                type, content: value, id
+            }
+        }) } } className="block p-t-0-5 p-r-0-5 p-l-0-5 p-b-0-5 w-fit table-resizble" style={{ overflowX: "auto" }}>
+            <table className="w-fit no-border">
+                <thead>
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5" style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => { setCurrentEdittingField(f) } }>{ f.name }</span></th>
+                        ) }
+                    </tr>
+                </thead>
+                <tbody>
+                    { data.length > 0 ?
+                        data.map( d =>
+                        <tr>
+                            { state.table && state.table.fields.map(
+                                f =>
+                                <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">{ d[f.name] }</td>
+                            ) }
+                        </tr>
+                    )
+                    :
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">Văn bản mẫu</td>
+                        ) }
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+
+
+const APITable = ( props ) => {
+    const { id, type, value, state } = props;
+    const dispatch = useDispatch();
+    const  [data, setData] = useState([]);
+    const unique_string = useSelector(state => state.unique_string)
+
+    useEffect(() => {
+
+        fetch(`/api/${unique_string}/retrieve/api/${id}`).then( res => res.json() ).then( ({ data }) => {
+            setData( data )
+            console.log(state.table)
+            console.log(data)
         })
     }, [])
 
@@ -350,6 +442,67 @@ const PageTable = ( props ) => {
     )
 }
 
+const APIPageTable = ( props ) => {
+    const { id, type, value, state } = props;
+    const dispatch = useDispatch();
+    const  [data, setData] = useState([]);
+    const unique_string = useSelector(state => state.unique_string)
+
+    useEffect(() => {
+
+        fetch(`/api/${unique_string}/retrieve/api/${id}`).then( res => res.json() ).then( ({ data }) => {
+            setData( data )
+            console.log(state.table)
+            console.log(data)
+        })
+    }, [])
+
+    const setCurrentEdittingField = (field) => {
+        console.log(id);
+        console.log(field)
+    }
+
+    return(
+        <div id={id} onClick={ () => { dispatch({
+            type: "set/current/editting/object",
+            payload: {
+                type, content: value, id
+            }
+        }) } } className="block p-t-0-5 p-r-0-5 p-l-0-5 p-b-0-5 w-fit table-resizble" style={{ overflowX: "auto" }}>
+            <table className="w-fit no-border">
+                <thead>
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5" style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => { setCurrentEdittingField(f) } }>{ f.name }</span></th>
+                        ) }
+                    </tr>
+                </thead>
+                <tbody>
+                    { data.length > 0 ?
+                        data.map( d =>
+                        <tr>
+                            { state.table && state.table.fields.map(
+                                f =>
+                                <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">{ d[f.name] }</td>
+                            ) }
+                        </tr>
+                    )
+                    :
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">Văn bản mẫu</td>
+                        ) }
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
 const StaticText = ( props ) => {
     const { id, type, value, state } = props;
     const dispatch = useDispatch();
@@ -401,6 +554,62 @@ const StaticTable = ( props ) => {
                         { state.table && state.table.fields.map(
                             f =>
                             <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5" style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => {console.log( f )} }>{ f.name }</span></th>
+                        ) }
+                    </tr>
+                </thead>
+                <tbody>
+                    { data.length > 0 ?
+                        data.map( d =>
+                        <tr>
+                            { state.table && state.table.fields.map(
+                                f =>
+                                <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">{ d[f.name] }</td>
+                            ) }
+                        </tr>
+                    )
+                    :
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <td className="p-t-0-5 p-l-0-5 p-b-0-5 border-bottom-pale">Văn bản mẫu</td>
+                        ) }
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+const APIStaticTable = ( props ) => {
+    const { id, type, value, state } = props;
+    const dispatch = useDispatch();
+    const  [data, setData] = useState([]);
+    const unique_string = useSelector(state => state.unique_string)
+
+    useEffect(() => {
+
+        fetch(`/api/${unique_string}/retrieve/api/${id}`).then( res => res.json() ).then( ({ data }) => {
+            setData( data )
+            console.log(state.table)
+            console.log(data)
+        })
+    }, [])
+
+    const setCurrentEdittingField = (field) => {
+        console.log(id);
+        console.log(field)
+    }
+
+    return(
+        <div id={id} className="block p-t-0-5 p-r-0-5 p-l-0-5 p-b-0-5 w-fit table-resizble" style={{ overflowX: "auto" }}>
+            <table className="w-fit no-border">
+                <thead>
+                    <tr>
+                        { state.table && state.table.fields.map(
+                            f =>
+                            <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5" style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => { setCurrentEdittingField(f) } }>{ f.name }</span></th>
                         ) }
                     </tr>
                 </thead>

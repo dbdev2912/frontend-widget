@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import $ from 'jquery';
 import 'jquery-ui-bundle';
@@ -14,7 +15,7 @@ import { auto_id, redirect } from '../../useful';
 
 export default () => {
     const [ api, setApiInfor ] = useState({});
-
+    const { api_id } = useParams();
     const [ tables, setTables ] = useState([]);
     const [ relations, setRelations ] = useState([]);
     const [ relationWidgets, setRelationsWidgets ] = useState([]);
@@ -29,6 +30,30 @@ export default () => {
     useEffect(()=>{
         fetch('/api/tables').then(res => res.json()).then(({ tables }) => {
             setRelations(tables);
+            fetch(`/api/${unique_string}/api/${api_id}`).then( res => res.json() ).then( (data) => {
+                dispatch({
+                    type: "initializing/API/tables",
+                    payload: {tables: data.api.tables},
+                });
+                let  apiTables = data.api.tables;
+                let widgets = apiTables.map( tb => {
+
+                    let originTable = tables.filter( t => t.name == tb.name )[0];
+
+                    for( let i = 0; i < tb.fields.length; i++){
+                        let f = tb.fields[i];
+                        let origin_field = originTable.fields.filter( fi => fi.name === f.name )[0];
+
+                        let index = originTable.fields.indexOf(origin_field);
+                        originTable.fields[index].is_hidden = true;
+                    }
+
+                    return <RelationSelector setCurrentField={ setCurrentField } updateApiTableState={updateApiTableState} relations = { relations } table={originTable}/>
+
+                })
+                setRelationsWidgets(widgets);
+                setApiInfor(data.api)
+            })
         });
     }, [])
 
@@ -43,13 +68,12 @@ export default () => {
     const submitNewApi = () => {
         console.log(api)
         console.log(apiTables)
-
-        fetch(`/api/${unique_string}/api/new`, {
+        fetch(`/api/${unique_string}/api/update`, {
             method: "post",
             headers: {
                 "content-type": "application/json"
             },
-            body: JSON.stringify({ api: { ...api, id: auto_id(), tables: apiTables }  }),
+            body: JSON.stringify({ api: { ...api, tables: apiTables }  }),
         }).then( res => res.json() ).then(data => {
             console.log(data)
         })
@@ -76,7 +100,6 @@ export default () => {
     }
 
     const renderFinalTable = () => {
-
         return(
             <div className="block p-t-0-5 p-r-0-5 p-l-0-5 p-b-0-5 w-fit table-resizble" style={{ overflowX: "auto" }}>
                 <table className="w-fit no-border">
@@ -204,7 +227,7 @@ export default () => {
 
 const RelationSelector = (props) => {
     const { relations, updateApiTableState, setCurrentField } = props;
-    const [ table, setTable ] = useState([]);
+    const [ table, setTable ] = useState(props.table ? props.table: {});
     const dispatch = useDispatch()
     const [ innerDrop, setInnerDrop ] = useState(false);
     const [ innerHeight, setInnerHeight ] = useState(0);

@@ -9,13 +9,29 @@ export default () => {
     const unique_string = useSelector( state => state.unique_string )
     const [ tableHeight, setTableHeight ] = useState(0);
     const [ apis, setApis ] = useState([
-        { title: "Api nè", edit_url: '/ml-admin/api/edit', url: "/api/sample", last_change: "Hôm qua lúc 16:54 - Cập nhật đủ thứ" }
+
     ])
 
     const [ apiDisplayList, setApiDisplayList ] = useState([])
     useEffect(() => {
         const height = window.innerHeight - $('#top-section').height() - 75;
         setTableHeight(height);
+
+        fetch(`/api/${unique_string}/apis`).then( res => res.json() )
+        .then( (data) => {
+            const apisList = data.apis;
+            const apiListFormated = apisList.map( api => {
+                if( !api.title ){
+                    api.title="Khum có tiêu đề"
+                }
+                return { ...api, edit_url: `/ml-admin/api/edit/${api.id}` }
+            })
+            setApiDisplayList([...apis, ...apiListFormated]);
+            setApis([...apis, ...apiListFormated])
+
+        })
+
+
         setApiDisplayList([...apis ]);
     }, [])
 
@@ -45,8 +61,8 @@ export default () => {
                     <thead className="sticky">
                         <tr>
                             <th className="text-left p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5" style={{display: "table-cell"}}>Tiêu đề</th>
-                            <th className="text-left p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5" style={{display: "table-cell"}}>Đường dẫn</th>
                             <th className="text-left p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5" style={{display: "table-cell"}}>Ghi chú</th>
+                            <th className="text-left p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5" style={{display: "table-cell"}}>Thay đổi</th>
                         </tr>
                     </thead>
 
@@ -54,7 +70,7 @@ export default () => {
                     { apiDisplayList.map( api =>
                         <tr className="hover" onClick={ () => { openTab(api.edit_url) } } key={ api.id }>
                             <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">{api.title}</td>
-                            <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">{api.url}</td>
+                            <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">{api.note}</td>
                             <td className="p-t-0-5 p-l-0-5 p-r-0-5 p-b-0-5">{api.last_change ?api.last_change: " " }</td>
                         </tr>
                     ) }

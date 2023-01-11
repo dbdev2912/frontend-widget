@@ -17,6 +17,10 @@ const initState = {
 
     pageWidgets: [],
 
+    APIRelations: [
+
+    ],
+
     apiTables: [],
     currentEdittingTable: {
 
@@ -142,6 +146,10 @@ export default ( state = initState, action ) => {
             return updateCurrentTableFieldsState( state, action );
             break;
 
+        case "initializing/API/tables":
+            return initializingApiTable(state, action)
+            break;
+
         default:
             return state;
     }
@@ -167,6 +175,12 @@ const initializingPageWidgets = (state, action) => {
     });
 
     return { ...state, pageWidgets: navWidgets }
+}
+
+const initializingApiTable = (state, action) => {
+    const { tables } = action.payload;
+
+    return { ...state, apiTables: tables }
 }
 
 const initializingStaticNavBarWidgets = (state, action) => {
@@ -196,7 +210,7 @@ const setCuurrentEdditingObject = (state, action) => {
 
     let existedWidgets = state.navWidgets.filter( nw => nw.id === id );
     let widget;
-
+    console.log({ type, content, id })
     if( existedWidgets.length > 0 ){
         let widgetObject = existedWidgets[0];
 
@@ -463,7 +477,10 @@ const setCurrentEdittingTable = (state, action) => {
 
 const updateCurrentTableFieldsState = ( state, action ) => {
     const { table, field, value } = action.payload;
-    const tableIndex = state.apiTables.indexOf(table);
+
+    const table_ = state.apiTables.filter( tb => tb.name === table.name )[0];
+    const tableIndex = state.apiTables.indexOf(table_)
+
     const index = table.fields.indexOf(field);
     table.fields[index].is_hidden = value;
     state.apiTables[tableIndex] = table;

@@ -23,6 +23,7 @@ export default () => {
             })
             setPageDisplayList([...pages, ...pageListFormated]);
             setPages([...pages, ...pageListFormated])
+
         })
     }, [])
 

@@ -21,6 +21,8 @@ import AdminUINav from './pages/admin/ui-nav';
 import AdminUINew from './pages/admin/ui-new-clone';
 import AdminUIEdit from './pages/admin/ui-edit';
 import AdminAPINew from './pages/admin/api-new';
+import AdminAPIEdit from './pages/admin/api-edit';
+import AdminForm from './pages/admin/form';
 
 import RenderDynamicPage from './pages/renderdynamicpage';
 import RenderSpecialPage from './pages/renderspecialpage';
@@ -78,6 +80,18 @@ function App() {
                       <Route exac path = '/ml-admin/ui/edit/:page_id' element={
                           <React.StrictMode>
                               <AdminUIEdit />
+                          </React.StrictMode>
+                      }/>
+
+                      <Route exac path = '/ml-admin/api/edit/:api_id' element={
+                          <React.StrictMode>
+                              <AdminAPIEdit />
+                          </React.StrictMode>
+                      }/>
+
+                      <Route exac path = '/ml-admin/form/:rel' element={
+                          <React.StrictMode>
+                              <AdminForm />
                           </React.StrictMode>
                       }/>
                       <Route exac path = ':dynamic_url' element={

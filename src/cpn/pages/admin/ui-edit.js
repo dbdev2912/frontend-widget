@@ -56,7 +56,7 @@ export default () => {
         fetch(`/api/${unique_string}/page/${page_id}`).then( res => res.json() )
         .then( (data) => {
             setPageInfor(data.page);
-
+            
             dispatch({
                 type: 'initializing/page/widgets',
                 payload: { widgets: data.page ? data.page.widgets : [] }
@@ -192,7 +192,7 @@ export default () => {
 
     const submitNewPage = () => {
         // console.log(pageWidgets)
-        // console.log(page);
+
         fetch(`/api/${ unique_string }/page/update`, {
             method: "post",
             headers: {

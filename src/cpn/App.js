@@ -18,6 +18,7 @@ import AdminRelations from './pages/admin/relations';
 import Navbar from './widget/navbar';
 import AdminDesign from './pages/admin/design';
 import AdminUINav from './pages/admin/ui-nav';
+import AdminUIBanner from './pages/admin/ui-banner';
 import AdminUINew from './pages/admin/ui-new-clone';
 import AdminUIEdit from './pages/admin/ui-edit';
 import AdminAPINew from './pages/admin/api-new';
@@ -65,6 +66,11 @@ function App() {
                               <AdminUINav />
                           </React.StrictMode>
                       }/>
+                      <Route exac path = '/ml-admin/ui/banner' element={
+                          <React.StrictMode>
+                              <AdminUIBanner />
+                          </React.StrictMode>
+                      }/>
 
                       <Route exac path = '/ml-admin/ui/new' element={
                           <React.StrictMode>
@@ -94,14 +100,14 @@ function App() {
                               <AdminForm />
                           </React.StrictMode>
                       }/>
-                      <Route exac path = ':dynamic_url' element={
-                          <React.StrictMode>
-                              <RenderDynamicPage />
-                          </React.StrictMode>
-                      }/>
                       <Route exac path = '/' element={
                           <React.StrictMode>
-                              <RenderSpecialPage />
+                          <RenderSpecialPage />
+                          </React.StrictMode>
+                      }/>
+                      <Route exac path = '*' element={
+                          <React.StrictMode>
+                              <RenderDynamicPage />
                           </React.StrictMode>
                       }/>
                 </Routes>

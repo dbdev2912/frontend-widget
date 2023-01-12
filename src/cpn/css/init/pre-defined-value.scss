@@ -19,9 +19,11 @@ $screen-width: 1280px;
 $pad-width: 768px;
 $mobile-width: 448px;
 
-.app-container{
+.app-container {
     padding-left: 300px;
+    padding-top: 5em;
 }
+
 
 .h-200{
     height: 200px;
@@ -30,6 +32,11 @@ $mobile-width: 448px;
 
 .bg-white{
     background: $white;
+}
+
+.bg-theme{
+    background: $theme-color;
+    color: $white;
 }
 
 table{

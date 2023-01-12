@@ -9,6 +9,7 @@ import Text from './texts/text';
 import Link from './texts/link';
 import Image from './widgets/image';
 import BlankNav from './widgets/blankNav';
+import BlankBanner from './widgets/staticBanner';
 
 import { auto_id, redirect } from '../../useful';
 
@@ -209,25 +210,26 @@ export default () => {
                         }>Văn bản</button>
                     <button className="button-theme hover text-little-bigger p-t-0-5 p-r-0-5  p-b-0-5  p-l-0-5 m-r-1"
                         id="text"
-                        onClick= {
+                        onClick = {
                             ()=>{
                                 const id = auto_id();
                                 setWidgets([...widgets, { widget: <Link id={id}/>, key: id }])
                             }
                         }>Đường dẫn</button>
 
-                    <h1 className="">Khung</h1>
-                    <button className="button-theme hover text-little-bigger p-t-0-5 p-r-0-5  p-b-0-5  p-l-0-5 m-r-1"
+                    {/*    <h1 className="">Khối</h1>
+                     <button className="button-theme hover text-little-bigger p-t-0-5 p-r-0-5  p-b-0-5  p-l-0-5 m-r-1"
                         id="text"
                         onClick= {
                             ()=>{
                                 const id = auto_id();
                                 setWidgets([...widgets, { widget: <Image id={id}/>, key: id }])
                             }
-                        }>Hình ảnh</button>
+                        }>Hình ảnh</button> */}
                 </div>
                 <div className="block border-bold h-fit-screen w-50 m-t-2 m-l-0-5 no-scroll-x relative" id="zone">
-                    <BlankNav/>
+                    <BlankBanner />
+                    <BlankNav />
                     { widgets.map(w => renderWidget(w.widget, w.key)) }
                 </div>
                 <div className="block h-fit-screen w-25 m-t-2 m-l-0-5">

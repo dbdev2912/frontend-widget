@@ -52,7 +52,7 @@ export default (props) => {
 
             <div className="w-80 m-t-1">
                 <div className="relative index-3">
-                    <span className="block w-fit border-bottom-pale text-left text-little-bigger">{  api.id? api.id: " "  }</span>
+                    <span className="block w-fit border-bottom-pale text-left text-little-bigger">{  api.title? api.title: " "  }</span>
                     { innerDrop ?
                         <React.StrictMode>
                             <img className="icon absolute drop-icon" src = "/icon/drop.png" onClick={ innerDropdownTrigger }/>

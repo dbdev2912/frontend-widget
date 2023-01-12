@@ -4,16 +4,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import $ from 'jquery';
 
 import BlankNav from './admin/widgets/staticNav';
+import StaticBanner from './admin/widgets/staticBanner';
 
 export default () => {
-    const { dynamic_url } = useParams()
+    const dynamic_url  = window.location.pathname;
     const dispatch = useDispatch();
     const [page, setPage] = useState({});
     const unique_string = useSelector( state => state.unique_string )
 
     const pageWidgets = useSelector(state => state.pageWidgets)
-
-    console.log( `/${dynamic_url}` );
 
     useEffect(() => {
         fetch(`/api/${unique_string}/navbar`).then( res => res.json() )
@@ -46,6 +45,7 @@ export default () => {
 
     return(
         <div>
+            <StaticBanner/>
             <BlankNav width={300}/>
             <div className="app-container">
                 { pageWidgets && pageWidgets.map( w =>  renderPageWidget( w.cpn ) ) }

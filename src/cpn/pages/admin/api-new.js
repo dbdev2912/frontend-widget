@@ -41,17 +41,17 @@ export default () => {
     }, [currentEdittingField])
 
     const submitNewApi = () => {
-        console.log(api)
-        console.log(apiTables)
+        // console.log(api)
+        // console.log(apiTables)
 
         fetch(`/api/${unique_string}/api/new`, {
             method: "post",
             headers: {
                 "content-type": "application/json"
             },
-            body: JSON.stringify({ api: { ...api, id: auto_id(), tables: apiTables }  }),
+            body: JSON.stringify({ api: { ...api, id: auto_id(), title: ( api.title ? api.title : "Untitled" ) ,tables: apiTables }  }),
         }).then( res => res.json() ).then(data => {
-            console.log(data)
+            alert("Successfully add new API: " + ( api.title ? api.title : "Untitled" ) )
         })
     }
 

@@ -9,6 +9,7 @@ import Text from './texts/text';
 import Link from './texts/link';
 
 import BlankNav from './widgets/staticNav';
+import BlankBanner from './widgets/blankBanner';
 
 import { auto_id, redirect } from '../../useful';
 
@@ -180,6 +181,7 @@ export default () => {
 
                 </div>
                 <div className="block border-bold h-fit-screen w-50 m-t-2 m-l-0-5 no-scroll-x relative" id="zone">
+                    <BlankBanner/>
                     <BlankNav width={200}/>
                     { widgets.map(w => renderWidget(w.widget, w.key)) }
                 </div>

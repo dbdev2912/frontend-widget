@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import $ from 'jquery';
 
 import BlankNav from './admin/widgets/staticNav';
+import StaticBanner from './admin/widgets/staticBanner';
 
 export default () => {
     const dispatch = useDispatch();
@@ -45,6 +46,7 @@ export default () => {
 
     return(
         <div>
+            <StaticBanner/>
             <BlankNav width={300}/>
             <div className="app-container">
                 { pageWidgets && pageWidgets.map( w =>  renderPageWidget( w && w.cpn ) ) }

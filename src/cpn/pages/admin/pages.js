@@ -9,7 +9,9 @@ export default () => {
     const unique_string = useSelector( state => state.unique_string )
     const [ tableHeight, setTableHeight ] = useState(0);
     const [ pages, setPages ] = useState([
-        { title: "Menu chung", edit_url: '/ml-admin/ui/navbar', url: "Khum có", last_change: "Hôm qua lúc 16:54 - Cập nhật đủ thứ" }
+        { title: "Menu chung", edit_url: '/ml-admin/ui/navbar', url: "Khum có", last_change: "" },
+        { title: "Banner", edit_url: '/ml-admin/ui/banner', url: "Khum có", last_change: "" }
+
     ])
 
     const [ pageDisplayList, setPageDisplayList ] = useState([])

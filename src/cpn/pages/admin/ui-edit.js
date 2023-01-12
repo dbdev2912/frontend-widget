@@ -12,6 +12,7 @@ import Link from './texts/link';
 import Table from './widgets/table';
 
 import BlankNav from './widgets/staticNav';
+import BlankBanner from './widgets/staticBanner';
 
 import { auto_id, redirect } from '../../useful';
 import { widgetSelector, pageWidgetSelector } from './widgetSelector';
@@ -56,7 +57,7 @@ export default () => {
         fetch(`/api/${unique_string}/page/${page_id}`).then( res => res.json() )
         .then( (data) => {
             setPageInfor(data.page);
-            
+
             dispatch({
                 type: 'initializing/page/widgets',
                 payload: { widgets: data.page ? data.page.widgets : [] }
@@ -303,6 +304,7 @@ export default () => {
                         }>Bảng</button>
                 </div>
                 <div className="block border-bold h-fit-screen w-50 m-t-2 m-l-0-5 no-scroll-x relative" id="zone">
+                    <BlankBanner/>
                     <BlankNav width={200}/>
                     <div className="absolute t-0 l-0">{ widgets.map(w => renderWidget(w.widget, w.key)) }</div>
                     <div style={{ paddingLeft: "200px" }}>

@@ -14,7 +14,10 @@ const initState = {
     unique_string : "ngonghinhnhilalunnhi",
 
     navWidgets: [],
-
+    bannerWidgets: {
+        img: "/assets/default.jpg",
+        cpnName: ""
+    },
     pageWidgets: [],
 
     APIRelations: [
@@ -46,7 +49,7 @@ export default ( state = initState, action ) => {
         case 'initializing/page/widgets':
             return initializingPageWidgets(state, action);
 
-            break
+            break;
 
         case 'initializing/static/navbar/widgets':
             return initializingStaticNavBarWidgets(state, action);
@@ -54,6 +57,14 @@ export default ( state = initState, action ) => {
 
         case 'initializing/static/page/widgets':
             return initializingStaticPageWidgets(state, action);
+            break;
+
+        case "initializing/banner":
+            return initializingBanner(state, action);
+            break;
+
+        case "update/banner":
+            return updateBanner(state, action);
             break;
 
         case "set/current/editting/object":
@@ -205,12 +216,19 @@ const initializingStaticPageWidgets = (state, action) => {
     return { ...state, pageWidgets: navWidgets }
 }
 
+const initializingBanner = (state, action) => {
+    return { ...state, bannerWidgets: action.payload.widgets }
+}
+
+const updateBanner = ( state, action ) => {
+    return { ...state, bannerWidgets: action.payload.banner }
+}
+
 const setCuurrentEdditingObject = (state, action) => {
     let { type, content, id } = action.payload;
 
     let existedWidgets = state.navWidgets.filter( nw => nw.id === id );
     let widget;
-    console.log({ type, content, id })
     if( existedWidgets.length > 0 ){
         let widgetObject = existedWidgets[0];
 

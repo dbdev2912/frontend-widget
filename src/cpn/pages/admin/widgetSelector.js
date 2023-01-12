@@ -517,8 +517,8 @@ const StaticLink = ( props ) => {
     const { id, type, value, state } = props;
     const dispatch = useDispatch();
     return(
-        <div id={id} className="block p-t-0-5 p-r-0-5 p-l-0-5 p-b-0-5">
-            <a className={ "text-little-bigger link link-disabled "+ state.className } href={ state.url } style={{ color: state.color, fontSize: `${state.size}px` }}>{ value }</a>
+        <div id={id} className="block p-t-1 p-r-0-5 p-l-0-5 p-b-0-5 hover">
+            <a className={ "text-little-bigger link link-disabled no-decorate "+ state.className } href={ state.url } style={{ color: state.color, fontSize: `${state.size}px` }}>{ value }</a>
         </div>
     )
 }

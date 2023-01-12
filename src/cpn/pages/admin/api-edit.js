@@ -53,6 +53,21 @@ export default () => {
                 })
                 setRelationsWidgets(widgets);
                 setApiInfor(data.api)
+                setTables(apiTables.map( tb => {
+
+                    let originTable = tables.filter( t => t.name == tb.name )[0];
+
+                    for( let i = 0; i < tb.fields.length; i++){
+                        let f = tb.fields[i];
+                        let origin_field = originTable.fields.filter( fi => fi.name === f.name )[0];
+
+                        let index = originTable.fields.indexOf(origin_field);
+                        originTable.fields[index].is_hidden = true;
+                    }
+
+                    return originTable
+
+                }))
             })
         });
     }, [])
@@ -73,9 +88,9 @@ export default () => {
             headers: {
                 "content-type": "application/json"
             },
-            body: JSON.stringify({ api: { ...api, tables: apiTables }  }),
+            body: JSON.stringify({ api: { ...api, tables: apiTables, title: (api.title ? api.title : "Untitled") }  }),
         }).then( res => res.json() ).then(data => {
-            console.log(data)
+            alert("Successfully update api: " + (api.title ? api.title : "Untitled") )
         })
     }
 
@@ -106,13 +121,14 @@ export default () => {
                     <thead>
                         <tr>
                         {
-                            apiTables.map(table =>
+                            tables.map(table =>
                                 <React.StrictMode>
                                     { table.fields.map(
                                         f =>
                                         <React.StrictMode>
                                             { f.is_hidden ?
-                                                <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5 " style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label" onClick={ () => { setCurrentField( table, f ) } }>{ f.name }</span></th>
+                                                <th field={ f.name } className="text-theme text-left p-t-0-5 p-l-0-5 p-b-0-5 " style={ {display: "table-cell", width: `${f.width}px` } }><span className="th-label"
+                                                    onClick={ () => { setCurrentField( table, f ) } }>{ f.name }</span></th>
                                             : null}
                                         </React.StrictMode>
                                     ) }

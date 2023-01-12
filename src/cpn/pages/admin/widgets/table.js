@@ -35,7 +35,7 @@ export default ( props ) => {
     return(
         <div id={id} className="floating-box" style={{ width: "fit-content" }} widget-type={type}>
 
-                <div className="floating-container relative index-2" style={{ width: "50vw", maxWidth: "unset", height: "100vh" }}>
+                <div className="floating-container relative index-10" style={{ width: "50vw", maxWidth: "unset", height: "100vh" }}>
                     <div className="p-l-2 p-r-2">
                         <div className="w-100 p-t-2 flex flex-middle">
                             <span className="text-left text-little-bigger">Loại bảng</span>
